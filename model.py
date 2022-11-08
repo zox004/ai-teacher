@@ -14,7 +14,8 @@ trans = transforms.Compose([transforms.Resize((100,100)),
                             ])
 trainset = torchvision.datasets.ImageFolder(root = "/Users/sinq/Desktop/PythonWorkspace/AITeacher/images",
                                             transform = trans)
-print(trainset.__getitem__(5))
+# print(trainset.__getitem__(5))
 
 classes = trainset.classes
 print(classes)
+print("hello")
