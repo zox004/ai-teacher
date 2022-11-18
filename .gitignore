@@ -1,2 +1,7 @@
 __pycache__
+<<<<<<< HEAD
 ai_teacher_venv
+=======
+.DS_Store
+ai_teacher_venv
+>>>>>>> web

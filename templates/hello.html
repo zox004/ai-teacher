@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teachable Machine as a Flask API</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css') }}">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+</head>
+
+<body>
+<h1>AI teacher</h1>
+<div class="agile-its">
+    <div clss = "container1">
+        <div class="shadow">
+                <h2><input id="class1" type="text" placeholder="Class 1"></h2>
+            <div class="w3layouts1">
+                <div class="photos-upload-view">
+                    <form name="upload1" id="upload1" action="/predict" method="POST" enctype="multipart/form-data">
+                        <div class="upload-btn-wrapper">
+                            <button class="btn1">이미지 업로드</button>
+                            <input type="file" value="Upload" name="image[]" onchange="setThumbnail(event);" accept=".jpg, .png, .gif, .jfif" multiple>
+                            
+                        </div>
+                        <p class="preview1_howmany"></p>
+                        
+                        <div class="img_preview1">
+                                                    
+                        </div>
+                        <!-- <input type="submit" value="예측 결과">
+                        {% if label %}
+                            <span class="result_lable">
+                                {{ label }}
+                            </span>
+                        {% endif %} -->
+                    </form>
+
+                </div>  
+            </div>
+        </div>
+
+        <div class="shadow">
+            <h2><input id="class2" type="text" placeholder="Class 2" ></h2>
+            <div class="w3layouts2">
+                <div class="photos-upload-view">
+                    <form id="upload2" action="/predict" method="POST" enctype="multipart/form-data">
+                        <div class="upload-btn-wrapper">
+                            <button class="btn2">이미지 업로드</button>
+                            <input type="file" value="Upload" name="image[]" onchange="setThumbnail2(event);" accept=".jpg, .png, .gif, .jfif" multiple>
+                            
+                        </div>
+                        <p class="preview2_howmany"></p>
+                        
+                        <div class="img_preview2">
+                                                    
+                        </div>
+                        <!-- <input type="submit" value="예측 결과">
+                        {% if label %}
+                            <span class="result_lable">
+                                {{ label }}
+                            </span>
+                        {% endif %} -->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class = "container2">
+        <div class="trainning_model">
+            <h2>ready.. go shoot!</h2>
+            <form id="trainning_btn" action="/hello" method="POST" enctype="multipart/form-data">
+                <div class="trainning">
+                    <button class="tr_btn">모델 학습시키기</button>
+                    <img id="ai_img" src="static/img/brain.png">
+                </div>
+                <!-- <input type="submit" value="예측 결과">
+                {% if label %}
+                    <span class="result_lable">
+                        {{ label }}
+                    </span>
+                {% endif %} -->
+            </form>
+
+    
+        </div>
+    </div>
+    <div class = "container3">
+        <div class="result">
+            <h2><input id="class2" type="text" value="결과 확인"></h2>
+            <div class="photos-upload-view">
+                <form id="upload" action="/predict" method="POST" enctype="multipart/form-data">
+                    <div class="upload-btn-wrapper">
+                        <button class="btn3">이미지 업로드</button>
+                        <input type="file" value="Upload" onchange="printFinal1(); printFinal2(); setThumbnail3(event);" name="image" accept=".jpg, .png, .gif, .jfif" multiple>
+                    </div>
+                </form>
+                    <div class="img_preview3"></div>
+                    <div id="final_container">
+                        <div id="final1_container">
+                            <div id="final1">
+
+                            </div>
+                            <div id = "final1_bar"></div>
+                        </div>
+                        <div id="final2_container">
+                            <div id="final2">
+
+                            </div>
+                            <div id="final2_bar"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- <input type="submit" value="예측 결과">
+                    {% if label %}
+                        <span class="result_lable">
+                            {{ label }}
+                        </span>
+                    {% endif %} -->
+            
+            </div>
+
+    
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+    function printFinal1()  {
+        // const name1 = $("#class1").val();
+        // document.getElementById("fin")
+        const name1 = document.getElementById("class1").value;
+        document.getElementById("final1_container").innerHTML = "<div class='name1'>" + name1 + "</div>";
+    }
+
+    function printFinal2()  {
+        const name2 = document.getElementById("class2").value;
+        document.getElementById("final2_container").innerHTML = "<div class='name2'>" + name2 + "</div>";
+    }
+    function setThumbnail(event) {
+        cnt1 = 0;
+    for (var image of event.target.files) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            
+            var img = document.createElement("img");
+            img.setAttribute("class", 'input_img');
+            img.setAttribute("src", event.target.result);
+            img.setAttribute("width", 60);
+            img.setAttribute("height", 60);
+            img.setAttribute("title", "클릭 시 삭제됩니다.");
+
+
+            document.querySelector(".img_preview1").appendChild(img);
+            
+
+            
+        };
+
+        console.log(image);
+        reader.readAsDataURL(image);
+        cnt1++;
+    }
+        document.querySelector(".preview1_howmany").innerHTML = cnt1 + "개 이미지 샘플";
+        $(function() {
+            $(".input_img").click(function(){
+                $(this).remove();
+            });
+        });
+    }
+
+    function setThumbnail2(event) {
+        cnt2 = 0;
+    for (var image of event.target.files) {
+        var reader = new FileReader();
+    
+        reader.onload = function(event) {
+            
+            var img = document.createElement("img");
+            img.setAttribute("class", 'input_img')
+            img.setAttribute("src", event.target.result);
+            img.setAttribute("width", 60);
+            img.setAttribute("height", 60);
+            img.setAttribute("title", "클릭 시 삭제됩니다.");
+
+            document.querySelector(".img_preview2").appendChild(img);
+
+            $(function() {
+                $(".input_img").click(function(){
+                    $(this).remove();
+                    cnt2--;
+                });
+            });
+        };
+
+        console.log(image);
+        reader.readAsDataURL(image);
+        cnt2++;
+    }
+    document.querySelector(".preview2_howmany").innerHTML = cnt2 + "개 이미지 샘플";
+    }
+
+
+    function setThumbnail3(event) {
+    for (var image of event.target.files) {
+        var reader = new FileReader();
+    
+        reader.onload = function(event) {
+            
+            var img = document.createElement("img");
+            img.setAttribute("class", 'result_img');
+            img.setAttribute("src", event.target.result);
+            img.setAttribute("width", 180);
+            img.setAttribute("height", 180);
+            img.setAttribute("title", "클릭 시 삭제됩니다.");
+
+            document.querySelector(".img_preview3").appendChild(img);
+
+            $(function() {
+                $(".result_img").click(function(){
+                    $(this).remove();
+                });
+            });
+        };  
+        console.log(image);
+        reader.readAsDataURL(image);
+    }
+    }
+    </script>
+</body>
+</html>
