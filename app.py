@@ -1,20 +1,28 @@
 from flask import Flask, request, render_template
+from PIL import Image
+import io
+
 app = Flask(__name__)
 
 @app.route('/')
-def hello():
-    return 'Hello, World!'
-
 @app.route('/hello')
 def hellohtml():
     return render_template("hello.html")
 
-@app.route('/method', methods=['GET', 'POST'])
+
+@app.route('/predict', methods=['GET', 'POST'])
 def method():
-    if request.method == 'GET':
-        return "GET으로 전달"
-    else:
-        return "POST로 전달"
+    if request.method == 'POST' :
+        file = request.file['upload1']
+        if not file : return "No Files"
+        image_bytes = file.read()
+
+        upload_image = Image.open(io.BytesIO(image_bytes))
+        upload_image.save("./static/", "jpg")
+
+        classes, scores = get_prediction()
 
 if __name__ == '__main__':
     app.run(debug=True)
+    if app.config['DEBUG']:
+	    app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 1
