@@ -18,9 +18,7 @@ def method():
         image_bytes = file.read()
 
         upload_image = Image.open(io.BytesIO(image_bytes))
-        upload_image.save("./static/", "jpg")
-
-        classes, scores = get_prediction()
+        upload_image.save("./static/img/", "png")
 
 if __name__ == '__main__':
     app.run(debug=True)
