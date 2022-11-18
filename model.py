@@ -123,6 +123,7 @@ def test(model):
     valid_images = []
     valid_dir = data_dir + '/test'
 
+    # test data에 있는 이미지 val_folders에 모아놓기
     val_folders = glob(valid_dir + '/*')
     for val_folder in val_folders:
         image_paths = glob(val_folder + '/*')
@@ -166,6 +167,7 @@ if __name__ == "__main__":
     
     print(device)
     
+    # 데이터셋을 불러올 때 사용할 변형(transformation) 객체 정의
     transforms_test = transforms.Compose([
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
@@ -178,7 +180,6 @@ if __name__ == "__main__":
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]) # 정규화(normalization)
     ])
 
-    # 데이터셋을 불러올 때 사용할 변형(transformation) 객체 정의
     train_datasets = datasets.ImageFolder(os.path.join(data_dir,'train'), transforms_train)
     test_datasets = datasets.ImageFolder(os.path.join(data_dir,'test'), transforms_test)
 
