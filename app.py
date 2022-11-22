@@ -41,4 +41,4 @@ def upload_file2():
 if __name__ == '__main__' :
     app.run(debug=True)
     if app.config['DEBUG']:
-	    app.config['SEND_FILE_MAX_AGE_DEFAULT'] 
+	    app.config['SEND_FILE_MAX_AGE_DEFAULT']
