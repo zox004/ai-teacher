@@ -33,9 +33,13 @@ def upload_file2():
         return redirect("/")
 
 
-# @app.route('train', methods=['GET', 'POST'])
-# def train_model() :
-#     if request.method == 'POST' :
+@app.route('/train', methods=['GET', 'POST'])
+def train_model() :
+    if request.method == 'POST' :
+        md.train()
+        
+        return redirect("/")
+        
         
 
 if __name__ == '__main__' :
