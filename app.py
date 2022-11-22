@@ -32,13 +32,7 @@ def upload_file2():
             f.save('./data/train/class2/' + secure_filename(f.filename))
         return redirect("/")
 
-
-# @app.route('train', methods=['GET', 'POST'])
-# def train_model() :
-#     if request.method == 'POST' :
-        
-
 if __name__ == '__main__' :
     app.run(debug=True)
     if app.config['DEBUG']:
-	    app.config['SEND_FILE_MAX_AGE_DEFAULT'] 
+	    app.config['SEND_FILE_MAX_AGE_DEFAULT']
