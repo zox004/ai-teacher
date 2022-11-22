@@ -22,7 +22,6 @@ import matplotlib.font_manager as fm
 # font = fm.FontProperties(fname=fontpath, size=10).get_name()
 # plt.rc('font', family=font)
 
-
 def train(model):
     num_features = model.fc.in_features
 
@@ -117,7 +116,7 @@ with torch.no_grad():
 
 
 ''' Test '''
-def test(model):
+def prediction(model = models.resnet34(pretrained=True)):
     model = torch.load("./weight/model_best_epoch.pt")
     model.eval()
     valid_images = []
@@ -160,7 +159,7 @@ def imshow(input, title):
     plt.show()
 
 
-if __name__ == "__main__":
+if __name__ == "__main__" :
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     data_dir = './data'
     model = models.resnet34(pretrained=True)
@@ -207,4 +206,4 @@ if __name__ == "__main__":
     model = models.resnet34(pretrained=True)
     
     # train(model)
-    test(model)
+    prediction(model)

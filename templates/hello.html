@@ -17,25 +17,24 @@
                 <h2><input id="class1" type="text" placeholder="Class 1"></h2>
             <div class="w3layouts1">
                 <div class="photos-upload-view">
-                    <form name="upload1" id="upload1" action="/predict" method="POST" enctype="multipart/form-data">
+                    <form id="upload1" action="/upload_class1" method="POST" enctype="multipart/form-data">
                         <div class="upload-btn-wrapper">
                             <button class="btn1">이미지 업로드</button>
-                            <input type="file" value="Upload" name="image[]" onchange="setThumbnail(event);" accept=".jpg, .png, .gif, .jfif" multiple>
-                            
+                            <input type="file" name="file1[]" onchange="setThumbnail(event);" accept=".jpg, .png, .gif, .jfif" multiple>
                         </div>
+                        <input type="submit">
+                    </form>
                         <p class="preview1_howmany"></p>
                         
                         <div class="img_preview1">
                                                     
                         </div>
-                        <!-- <input type="submit" value="예측 결과">
-                        {% if label %}
+                        <!-- <input type="submit" value="예측 결과"> -->
+                        <!-- {% if label %}
                             <span class="result_lable">
                                 {{ label }}
                             </span>
                         {% endif %} -->
-                    </form>
-
                 </div>  
             </div>
         </div>
@@ -44,12 +43,13 @@
             <h2><input id="class2" type="text" placeholder="Class 2" ></h2>
             <div class="w3layouts2">
                 <div class="photos-upload-view">
-                    <form id="upload2" action="/predict" method="POST" enctype="multipart/form-data">
+                    <form id="upload2" action="/upload_class2" method="POST" enctype="multipart/form-data">
                         <div class="upload-btn-wrapper">
                             <button class="btn2">이미지 업로드</button>
-                            <input type="file" value="Upload" name="image[]" onchange="setThumbnail2(event);" accept=".jpg, .png, .gif, .jfif" multiple>
-                            
+                            <input type="file" name="file2[]" onchange="setThumbnail2(event);" accept=".jpg, .png, .gif, .jfif" multiple>
                         </div>
+                        <input type="submit">
+                    </form>
                         <p class="preview2_howmany"></p>
                         
                         <div class="img_preview2">
@@ -61,7 +61,6 @@
                                 {{ label }}
                             </span>
                         {% endif %} -->
-                    </form>
                 </div>
             </div>
         </div>
@@ -69,7 +68,7 @@
     <div class = "container2">
         <div class="trainning_model">
             <h2>ready.. go shoot!</h2>
-            <form id="trainning_btn" action="/hello" method="POST" enctype="multipart/form-data">
+            <form id="trainning_btn" action="/train" method="POST" enctype="multipart/form-data">
                 <div class="trainning">
                     <button class="tr_btn">모델 학습시키기</button>
                     <img id="ai_img" src="static/img/brain.png">
@@ -117,17 +116,13 @@
                             {{ label }}
                         </span>
                     {% endif %} -->
-            
             </div>
-
-    
         </div>
     </div>
 
 </div>
 
 <script>
-
     function printFinal1()  {
         // const name1 = $("#class1").val();
         // document.getElementById("fin")
@@ -154,9 +149,12 @@
 
 
             document.querySelector(".img_preview1").appendChild(img);
-            
 
-            
+            $(function() {
+                $(".input_img").click(function(){
+                    (this).remove();
+                });
+            });
         };
 
         console.log(image);
@@ -164,11 +162,7 @@
         cnt1++;
     }
         document.querySelector(".preview1_howmany").innerHTML = cnt1 + "개 이미지 샘플";
-        $(function() {
-            $(".input_img").click(function(){
-                $(this).remove();
-            });
-        });
+        
     }
 
     function setThumbnail2(event) {

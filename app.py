@@ -1,38 +1,44 @@
-<<<<<<< HEAD
-from flask import Flask
-app = Flask(__name__)
- 
-@app.route('/')
-def hello_world():
-    return 'Hello World!!!'
- 
-if __name__ == '__main__':
-    app.run(debug=True)
-=======
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect, url_for
 from PIL import Image
+from werkzeug.utils import secure_filename
+import model as md
 import io
+import os
 
 app = Flask(__name__)
 
 @app.route('/')
-@app.route('/hello')
 def hellohtml():
     return render_template("hello.html")
 
 
-@app.route('/predict', methods=['GET', 'POST'])
-def method():
+@app.route('/upload_class1', methods=['GET', 'POST'])
+def upload_file():
     if request.method == 'POST' :
-        file = request.file['upload1']
-        if not file : return "No Files"
-        image_bytes = file.read()
+        files = request.files.getlist("file1[]")
 
-        upload_image = Image.open(io.BytesIO(image_bytes))
-        upload_image.save("./static/img/", "png")
+        for f in files:
+            f.save('./data/train/class1/' + secure_filename(f.filename))
 
-if __name__ == '__main__':
+        return redirect("/")
+
+
+@app.route('/upload_class2', methods=['GET', 'POST'])
+def upload_file2():
+    if request.method == 'POST' :
+        files = request.files.getlist("file2[]")
+
+        for f in files:
+            f.save('./data/train/class2/' + secure_filename(f.filename))
+        return redirect("/")
+
+
+# @app.route('train', methods=['GET', 'POST'])
+# def train_model() :
+#     if request.method == 'POST' :
+        
+
+if __name__ == '__main__' :
     app.run(debug=True)
     if app.config['DEBUG']:
-	    app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 1
->>>>>>> web
+	    app.config['SEND_FILE_MAX_AGE_DEFAULT'] 

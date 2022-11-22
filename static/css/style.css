@@ -107,6 +107,10 @@ left: 5px;
 float: left;
 }
 
+.btn10 {
+    left: 100px;
+}
+
 .btn1, .btn2, .btn3 {
 float: left;
 border: 2px solid gray;
@@ -116,6 +120,17 @@ padding: 8px 20px;
 border-radius: 8px;
 font-size: 20px;
 font-weight: bold;
+}
+
+.tr_btn {
+    border: 2px solid black;
+    color: rgb(42, 3, 140);
+    background-color: white;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 20px;
+    font-weight: bold;
+
 }
 
 .btn3 {
@@ -169,17 +184,6 @@ margin-left:23%;
     height: 500px;  
     border-radius: 20px;
     box-shadow: 9px 9px 16px rgb(163, 177, 198, 0.6), -9px -9px 16px rgb(255, 255, 255, 0.5);
-}
-
-.tr_btn {
-    border: 2px solid black;
-    color: rgb(42, 3, 140);
-    background-color: white;
-    padding: 8px 20px;
-    border-radius: 8px;
-    font-size: 20px;
-    font-weight: bold;
-    bottom: 50px;
 }
 
 #ai_img {
