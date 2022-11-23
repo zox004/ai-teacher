@@ -39,27 +39,27 @@ transforms_train = transforms.Compose([
     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]) # 정규화(normalization)
 ])
 
-train_datasets = datasets.ImageFolder(os.path.join(data_dir,'train'), transforms_train)
-test_datasets = datasets.ImageFolder(os.path.join(data_dir,'test'), transforms_test)
-
-
-train_dataloader = torch.utils.data.DataLoader(train_datasets, batch_size=4, shuffle=True, num_workers=0)
-#valid_dataloader = torch.utils.data.DataLoader(valid_datasets, batch_size=4, shuffle=False, num_workers=0)
-
-print('학습 데이터셋 크기:', len(train_datasets))
-#print('테스트 데이터셋 크기:', len(valid_datasets))
-
-class_names = train_datasets.classes
-print('학습 클래스:', class_names)
-
-# 학습 데이터를 배치 단위로 불러오기
-iterator = iter(train_dataloader)
-# 현재 배치를 이용해 격자 형태의 이미지를 만들어 시각화
-inputs, classes = next(iterator)
-out = torchvision.utils.make_grid(inputs)
-# imshow(out, title=[class_names[x] for x in classes])
 
 def train(model = models.resnet34(pretrained=True)):
+    train_datasets = datasets.ImageFolder(os.path.join(data_dir,'train'), transforms_train)
+    test_datasets = datasets.ImageFolder(os.path.join(data_dir,'test'), transforms_test)
+
+
+    train_dataloader = torch.utils.data.DataLoader(train_datasets, batch_size=4, shuffle=True, num_workers=0)
+    #valid_dataloader = torch.utils.data.DataLoader(valid_datasets, batch_size=4, shuffle=False, num_workers=0)
+
+    print('학습 데이터셋 크기:', len(train_datasets))
+    #print('테스트 데이터셋 크기:', len(valid_datasets))
+
+    class_names = train_datasets.classes
+    print('학습 클래스:', class_names)
+
+    # 학습 데이터를 배치 단위로 불러오기
+    iterator = iter(train_dataloader)
+    # 현재 배치를 이용해 격자 형태의 이미지를 만들어 시각화
+    inputs, classes = next(iterator)
+    out = torchvision.utils.make_grid(inputs)
+    # imshow(out, title=[class_names[x] for x in classes])
     num_features = model.fc.in_features
 
     # transfer learning

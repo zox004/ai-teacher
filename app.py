@@ -39,6 +39,13 @@ def train_model() :
         md.train()
         
         return redirect("/")
+    
+# @app.route('/prediction', methods=['GET', 'POST'])
+# def prediction() :
+#     if request.method == 'POST' :
+#         md.prediction()
+        
+#         return redirect("/")
         
         
 
