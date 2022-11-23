@@ -15,6 +15,9 @@ import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 
+from PIL import Image
+import random
+
 # print(fm.findSystemFonts(fontpaths=None, fontext='ttf'))
 
 # 한글 폰트 설정하기
@@ -42,7 +45,7 @@ transforms_train = transforms.Compose([
 
 def train(model = models.resnet34(pretrained=True)):
     train_datasets = datasets.ImageFolder(os.path.join(data_dir,'train'), transforms_train)
-    test_datasets = datasets.ImageFolder(os.path.join(data_dir,'test'), transforms_test)
+    # test_datasets = datasets.ImageFolder(os.path.join(data_dir,'test'), transforms_test)
 
 
     train_dataloader = torch.utils.data.DataLoader(train_datasets, batch_size=4, shuffle=True, num_workers=0)
@@ -76,7 +79,7 @@ def train(model = models.resnet34(pretrained=True)):
 
     model = model.to(device)
 
-    num_epochs = 30
+    num_epochs = 10
 
     best_epoch = None
     best_loss = 5
@@ -154,27 +157,30 @@ with torch.no_grad():
 
 ''' Test '''
 def prediction(model = models.resnet34(pretrained=True)):
+    train_datasets = datasets.ImageFolder(os.path.join(data_dir,'train'), transforms_train)
+    class_names = train_datasets.classes
     model = torch.load("./weight/model_best_epoch.pt")
     model.eval()
     valid_images = []
     valid_dir = data_dir + '/test'
 
     # test data에 있는 이미지 val_folders에 모아놓기
-    val_folders = glob(valid_dir + '/*')
-    for val_folder in val_folders:
-        image_paths = glob(val_folder + '/*')
-        for image_path in image_paths: valid_images.append(image_path)
+    valid_image = glob(valid_dir + '/*')
 
-
+    # for val_folder in val_folders:
+    #     image_paths = glob(val_folder + '/*')
+    #     for image_path in image_paths:
+    #         valid_images.append(image_path)
     
-    num = random.randint(0,len(valid_images)-1)
-    valid_image = valid_images[num]
+    # print(len(valid_images))
+    # num = random.randint(0,len(valid_images)-1)
+    # valid_image = valid_images[num]
 
 
-    from PIL import Image
-    image = Image.open(valid_image)
+
+    image = Image.open(valid_image[0])
+
     image = transforms_test(image).unsqueeze(0).to(device)
-
 
     with torch.no_grad():
         outputs = model(image)
@@ -194,7 +200,6 @@ def imshow(input, title):
     plt.imshow(input)
     plt.title(title)
     plt.show()
-
 
 # if __name__ == "__main__" :
 #     # train(model)

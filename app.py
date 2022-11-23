@@ -39,7 +39,18 @@ def train() :
 
         return redirect("/")
 
+@app.route('/predict', methods=['GET', 'POST'])
+def prediction() :
+    if request.method == 'POST' :
+
+        f = request.files['prediction_file']
+        f.save('./data/test/' + secure_filename(f.filename))
+        md.prediction()
+
+        return redirect("/")
+
+
 if __name__ == '__main__' :
     app.run(debug=True)
     if app.config['DEBUG']:
-	    app.config['SEND_FILE_MAX_AGE_DEFAULT']
+        app.config['SEND_FILE_MAX_AGE_DEFAULT']
