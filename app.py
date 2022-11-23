@@ -18,7 +18,7 @@ def upload_file():
         files = request.files.getlist("file1[]")
 
         for f in files:
-            f.save('./data/train/class1/' + secure_filename(f.filename))
+            f.save('./data/train/cat/' + secure_filename(f.filename))
 
         return redirect("/")
 
@@ -29,7 +29,7 @@ def upload_file2():
         files = request.files.getlist("file2[]")
 
         for f in files:
-            f.save('./data/train/class2/' + secure_filename(f.filename))
+            f.save('./data/train/dog/' + secure_filename(f.filename))
         return redirect("/")
 
 
@@ -40,12 +40,14 @@ def train_model() :
         
         return redirect("/")
     
-# @app.route('/prediction', methods=['GET', 'POST'])
-# def prediction() :
-#     if request.method == 'POST' :
-#         md.prediction()
+@app.route('/predict', methods=['GET', 'POST'])
+def img_prediction() :
+    if request.method == 'POST' :
+        f = request.files['prediction_file']
+        f.save('./data/test/' + secure_filename(f.filename))
+        md.prediction()
         
-#         return redirect("/")
+        return redirect("/")
         
         
 
