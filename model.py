@@ -8,7 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 import os
-
+import random
 from glob import glob
 
 import matplotlib
@@ -22,7 +22,44 @@ import matplotlib.font_manager as fm
 # font = fm.FontProperties(fname=fontpath, size=10).get_name()
 # plt.rc('font', family=font)
 
-def train(model):
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+data_dir = './data'
+model = models.resnet34(pretrained=True)
+
+# 데이터셋을 불러올 때 사용할 변형(transformation) 객체 정의
+transforms_test = transforms.Compose([
+    transforms.Resize((224, 224)),
+    transforms.ToTensor(),
+    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+])
+transforms_train = transforms.Compose([
+    transforms.Resize((224, 224)),
+    transforms.RandomHorizontalFlip(), # 데이터 증진(augmentation)
+    transforms.ToTensor(),
+    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]) # 정규화(normalization)
+])
+
+
+def train(model = models.resnet34(pretrained=True)):
+    train_datasets = datasets.ImageFolder(os.path.join(data_dir,'train'), transforms_train)
+    test_datasets = datasets.ImageFolder(os.path.join(data_dir,'test'), transforms_test)
+
+
+    train_dataloader = torch.utils.data.DataLoader(train_datasets, batch_size=4, shuffle=True, num_workers=0)
+    #valid_dataloader = torch.utils.data.DataLoader(valid_datasets, batch_size=4, shuffle=False, num_workers=0)
+
+    print('학습 데이터셋 크기:', len(train_datasets))
+    #print('테스트 데이터셋 크기:', len(valid_datasets))
+
+    class_names = train_datasets.classes
+    print('학습 클래스:', class_names)
+
+    # 학습 데이터를 배치 단위로 불러오기
+    iterator = iter(train_dataloader)
+    # 현재 배치를 이용해 격자 형태의 이미지를 만들어 시각화
+    inputs, classes = next(iterator)
+    out = torchvision.utils.make_grid(inputs)
+    # imshow(out, title=[class_names[x] for x in classes])
     num_features = model.fc.in_features
 
     # transfer learning
@@ -129,7 +166,7 @@ def prediction(model = models.resnet34(pretrained=True)):
         for image_path in image_paths: valid_images.append(image_path)
 
 
-    import random
+    
     num = random.randint(0,len(valid_images)-1)
     valid_image = valid_images[num]
 
@@ -159,51 +196,6 @@ def imshow(input, title):
     plt.show()
 
 
-if __name__ == "__main__" :
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    data_dir = './data'
-    model = models.resnet34(pretrained=True)
-    
-    print(device)
-    
-    # 데이터셋을 불러올 때 사용할 변형(transformation) 객체 정의
-    transforms_test = transforms.Compose([
-        transforms.Resize((224, 224)),
-        transforms.ToTensor(),
-        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-    ])
-    transforms_train = transforms.Compose([
-        transforms.Resize((224, 224)),
-        transforms.RandomHorizontalFlip(), # 데이터 증진(augmentation)
-        transforms.ToTensor(),
-        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]) # 정규화(normalization)
-    ])
-
-    train_datasets = datasets.ImageFolder(os.path.join(data_dir,'train'), transforms_train)
-    test_datasets = datasets.ImageFolder(os.path.join(data_dir,'test'), transforms_test)
-
-
-    train_dataloader = torch.utils.data.DataLoader(train_datasets, batch_size=4, shuffle=True, num_workers=0)
-    #valid_dataloader = torch.utils.data.DataLoader(valid_datasets, batch_size=4, shuffle=False, num_workers=0)
-
-    print('학습 데이터셋 크기:', len(train_datasets))
-    #print('테스트 데이터셋 크기:', len(valid_datasets))
-
-    class_names = train_datasets.classes
-    print('학습 클래스:', class_names)
-
-
-
-    # 학습 데이터를 배치 단위로 불러오기
-    iterator = iter(train_dataloader)
-    # 현재 배치를 이용해 격자 형태의 이미지를 만들어 시각화
-    inputs, classes = next(iterator)
-    out = torchvision.utils.make_grid(inputs)
-    # imshow(out, title=[class_names[x] for x in classes])
-
-
-    # implement model
-    model = models.resnet34(pretrained=True)
-    
-    # train(model)
-    prediction(model)
+# if __name__ == "__main__" :
+#     # train(model)
+#     # prediction(model)

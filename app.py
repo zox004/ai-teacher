@@ -32,6 +32,13 @@ def upload_file2():
             f.save('./data/train/class2/' + secure_filename(f.filename))
         return redirect("/")
 
+@app.route('/train', methods=['GET', 'POST'])
+def train() :
+    if request.method == 'POST' :
+        md.train()
+
+        return redirect("/")
+
 if __name__ == '__main__' :
     app.run(debug=True)
     if app.config['DEBUG']:
