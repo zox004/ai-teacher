@@ -123,6 +123,7 @@ font-weight: bold;
 }
 
 .tr_btn {
+    margin-top: 35px;
     border: 2px solid black;
     color: rgb(42, 3, 140);
     background-color: white;

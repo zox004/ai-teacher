@@ -1,9 +1,6 @@
 from flask import Flask, request, render_template, redirect, url_for
-from PIL import Image
 from werkzeug.utils import secure_filename
 import model as md
-import io
-import os
 
 app = Flask(__name__)
 

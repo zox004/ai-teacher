@@ -42,7 +42,7 @@ transforms_train = transforms.Compose([
 ])
 
 
-def train(model = models.resnet50(weights="IMAGENET1K_V2")):
+def train(model = models.resnet50(weights=None)):
     train_datasets = datasets.ImageFolder(os.path.join(data_dir,'train'), transforms_train)
     # test_datasets = datasets.ImageFolder(os.path.join(data_dir,'test'), transforms_test)
 
@@ -61,6 +61,7 @@ def train(model = models.resnet50(weights="IMAGENET1K_V2")):
     # 현재 배치를 이용해 격자 형태의 이미지를 만들어 시각화
     inputs, classes = next(iterator)
     out = torchvision.utils.make_grid(inputs)
+    
     # imshow(out, title=[class_names[x] for x in classes])
     num_features = model.fc.in_features
 
@@ -201,8 +202,8 @@ def imshow(input, title):
     plt.imshow(input)
     plt.title(title)
     plt.show()
-
+    
 
 if __name__ == "__main__" :
-    # train()
-    prediction()
+    train()
+    # prediction()
