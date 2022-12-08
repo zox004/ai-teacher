@@ -160,6 +160,7 @@ def prediction():
     train_datasets = datasets.ImageFolder(os.path.join(data_dir,'train'), transforms_train)
     class_names = train_datasets.classes
     model = torch.load("./weight/model_best_epoch.pt")
+    # model = models.resnet50(weights="IMAGENET1K_V1")
     model.eval()
     valid_images = []
     valid_dir = data_dir + '/test'
@@ -205,5 +206,5 @@ def imshow(input, title):
     
 
 if __name__ == "__main__" :
-    train()
-    # prediction()
+    # train()
+    prediction()
