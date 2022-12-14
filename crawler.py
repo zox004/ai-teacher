@@ -23,14 +23,12 @@ def scroll_down(driver):
 
                if new_height == last_height:
                    break
-
-
         last_height = new_height
         
 keyword = input('검색할 태그를 입력하세요 : ')
 crawl_num = int(input("크롤링할 갯수: "))
 url = 'https://www.google.com/search?q={}&source=lnms&tbm=isch&sa=X&ved=2ahUKEwjgwPKzqtXuAhWW62EKHRjtBvcQ_AUoAXoECBEQAw&biw=768&bih=712'.format(keyword)
-path = "./img"
+path = "./data/train/" + keyword
 
 driver = webdriver.Chrome()
 driver.get(url)
@@ -44,7 +42,7 @@ soup = BeautifulSoup(html, 'html.parser')
 images = soup.find_all('img', attrs={'class':'rg_i Q4LuWd'})
 
 if not os.path.isdir(path):
-    os.mkdir(path)
+    os.makedirs(path)
 
 print('number of img tags: ', len(images))
 
