@@ -8,7 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time
 import os
-import random
+
 from glob import glob
 
 import matplotlib
@@ -27,7 +27,6 @@ import random
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 data_dir = './data'
-model = models.resnet34(pretrained=True)
 
 # 데이터셋을 불러올 때 사용할 변형(transformation) 객체 정의
 transforms_test = transforms.Compose([
@@ -43,7 +42,7 @@ transforms_train = transforms.Compose([
 ])
 
 
-def train(model = models.resnet34(pretrained=True)):
+def train(model = models.resnet50(weights="IMAGENET1K_V2")):
     train_datasets = datasets.ImageFolder(os.path.join(data_dir,'train'), transforms_train)
     # test_datasets = datasets.ImageFolder(os.path.join(data_dir,'test'), transforms_test)
 
@@ -70,12 +69,12 @@ def train(model = models.resnet34(pretrained=True)):
         nn.Linear(num_features, 256),        # 마지막 완전히 연결된 계층에 대한 입력은 선형 계층, 256개의 출력값을 가짐
         nn.ReLU(),
         nn.Dropout(0.4),
-        nn.Linear(256, num_features),      # Since 10 possible outputs = 10 classes
+        nn.Linear(256, len(class_names)),      # Since 10 possible outputs = 10 classes
         nn.LogSoftmax(dim=1)              # For using NLLLoss()
     )
 
     criterion = nn.NLLLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9, weight_decay=1e-5)
+    optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-5)
 
     model = model.to(device)
 
@@ -156,7 +155,7 @@ with torch.no_grad():
 
 
 ''' Test '''
-def prediction(model = models.resnet34(pretrained=True)):
+def prediction():
     train_datasets = datasets.ImageFolder(os.path.join(data_dir,'train'), transforms_train)
     class_names = train_datasets.classes
     model = torch.load("./weight/model_best_epoch.pt")
@@ -176,17 +175,19 @@ def prediction(model = models.resnet34(pretrained=True)):
     # num = random.randint(0,len(valid_images)-1)
     # valid_image = valid_images[num]
 
-
-
     image = Image.open(valid_image[0])
-
     image = transforms_test(image).unsqueeze(0).to(device)
-
+    
     with torch.no_grad():
-        outputs = model(image)
-        _, preds = torch.max(outputs, 1)
-        
-        imshow(image.cpu().data[0], title=' Classification : ' + class_names[preds[0]])
+        # origin code
+        # outputs = model(image)
+        # _, preds = torch.max(outputs, 1)
+        # imshow(image.cpu().data[0], title=' Classification : ' + class_names[preds[0]])
+    
+        # modifying code - show answer percent
+        prediction = model(image).squeeze(0).softmax(0)
+        for i in range(len(class_names)):
+            print(f"{class_names[i]}: {round(100 * prediction[i].item())}%")
         
 def imshow(input, title):
     # torch.Tensor를 numpy 객체로 변환
@@ -201,6 +202,7 @@ def imshow(input, title):
     plt.title(title)
     plt.show()
 
-# if __name__ == "__main__" :
-#     # train(model)
-#     # prediction(model)
+
+if __name__ == "__main__" :
+    # train()
+    prediction()

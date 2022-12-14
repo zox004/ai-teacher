@@ -107,22 +107,20 @@ left: 5px;
 float: left;
 }
 
-.btn10 {
-    left: 100px;
-}
-
 .btn1, .btn2, .btn3 {
+margin-top: 15px;
 float: left;
 border: 2px solid gray;
 color: grey;
 background-color: white;
-padding: 8px 20px;
+padding: 8px 8px;
 border-radius: 8px;
-font-size: 20px;
+font-size: 14px;
 font-weight: bold;
 }
 
 .tr_btn {
+    margin-top: 35px;
     border: 2px solid black;
     color: rgb(42, 3, 140);
     background-color: white;
@@ -188,9 +186,9 @@ margin-left:23%;
 
 #ai_img {
     width: 100px;
+    margin-top: 20px;
     height: 100px;
     display: block;
-    margin-block: 20px;
     margin-left: 70px;
 }
 
@@ -285,6 +283,8 @@ img {
 .preview1_howmany {
     float: left;
     margin:  25px 0 0 30px;
+    margin-top: 10px;
+    margin-left: 40px;
 }
 
 .preview2_howmany {
@@ -325,4 +325,17 @@ img {
     text-align: center;
     font-size: 20px;
     border-radius: 20px;
+}
+
+#class1_sub, #class2_sub {
+    margin-top: 15px;
+    margin-left: 20px;
+    float: left;
+    border: 2px solid gray;
+    color: grey;
+    background-color: white;
+    padding: 8px 5px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
 }
