@@ -6,7 +6,7 @@ import pymongo
 import os
 from gridfs import GridFS
 
-client = pymongo.MongoClient("mongodb+srv://aiteacher:1234@aiteacher.2urehvj.mongodb.net/?retryWrites=true&w=majority")
+client = MongoClient("mongodb+srv://aiteacher:1234@aiteacher.2urehvj.mongodb.net/?retryWrites=true&w=majority")
 db = client.aiteacher
 collection = db.data
 gfs = GridFS(db)
@@ -62,7 +62,7 @@ def train() :
 @app.route('/predict', methods=['GET', 'POST'])
 def img_prediction() :
     if request.method == 'POST' :
-
+        os.makedirs('./data/test',exist_ok=True)
         f = request.files['prediction_file']
         f.save('./data/test/' + secure_filename(f.filename))
         md.prediction()
@@ -77,7 +77,7 @@ def download_file():
     return send_file(PATH, as_attachment=True)
 
 if __name__ == '__main__' :
-    app.run(debug=True)
+    app.run(debug=True,host='0.0.0.0')
     if app.config['DEBUG']:
         app.config['SEND_FILE_MAX_AGE_DEFAULT']
 
