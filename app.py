@@ -43,7 +43,12 @@ def upload_file2():
         files = request.files.getlist("file2[]")
 
         for f in files:
-            f.save('./data/train/class2/' + secure_filename(f.filename))
+            file_name = f.filename
+            data = f.read()
+            content_type = f.content_type
+            insertImg = gfs.put(data, content_type=content_type, file_name=file_name)
+        # for f in files:
+        #     f.save('./data/train/class2/' + secure_filename(f.filename))
         return redirect("/")
 
 @app.route('/train', methods=['GET', 'POST'])
@@ -70,23 +75,9 @@ def img_prediction() :
 def download_file():
     PATH = 'weight/model_best_epoch.pt'
     return send_file(PATH, as_attachment=True)
-    # files_list = os.listdir("./weight")
-    # if request.method == 'POST':
-    #     sw = 0
-    #     for x in files_list:
-    #         if(x==request.form['downloadfile']):
-    #             sw=1
-    #     try:
-    #         path = "./weight/"
-    #         return send_file(path + request.form['downloadfile'],
-    #                 download_name = request.form['downloadfile'],
-    #                 as_attachment=True)
-    #     except:
-    #         print("download error")
-    # return render_template('hello.html', files=files_list)
-
 
 if __name__ == '__main__' :
     app.run(debug=True)
     if app.config['DEBUG']:
         app.config['SEND_FILE_MAX_AGE_DEFAULT']
+

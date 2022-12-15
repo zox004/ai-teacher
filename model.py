@@ -18,6 +18,9 @@ import matplotlib.font_manager as fm
 from PIL import Image
 import random
 
+import shutil
+
+
 # print(fm.findSystemFonts(fontpaths=None, fontext='ttf'))
 
 # 한글 폰트 설정하기
@@ -42,7 +45,8 @@ transforms_train = transforms.Compose([
 ])
 
 
-def train(model = models.resnet50(weights="IMAGENET1K_V2")):
+
+def train(model = models.resnet50(weights=None)):
     train_datasets = datasets.ImageFolder(os.path.join(data_dir,'train'), transforms_train)
     # test_datasets = datasets.ImageFolder(os.path.join(data_dir,'test'), transforms_test)
 
@@ -61,6 +65,7 @@ def train(model = models.resnet50(weights="IMAGENET1K_V2")):
     # 현재 배치를 이용해 격자 형태의 이미지를 만들어 시각화
     inputs, classes = next(iterator)
     out = torchvision.utils.make_grid(inputs)
+
     # imshow(out, title=[class_names[x] for x in classes])
     num_features = model.fc.in_features
 
@@ -77,6 +82,7 @@ def train(model = models.resnet50(weights="IMAGENET1K_V2")):
     optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-5)
 
     model = model.to(device)
+
 
     num_epochs = 10
 
@@ -122,46 +128,50 @@ def train(model = models.resnet50(weights="IMAGENET1K_V2")):
             print("best_loss: {:.4f} \t best_epoch: {}".format(best_loss, best_epoch))
 
     os.makedirs('./weight',exist_ok=True)
-    torch.save(model, './weight/model_best_epoch.pt')
+    # torch.save(model, './weight/model_best_epoch.pt')
 
-''' Valid 
-with torch.no_grad():
-    model.eval()
-    start_time = time.time()
-    
-    running_loss = 0.
-    running_corrects = 0
+# Valid 
+    # with torch.no_grad():
+    #     model.eval()
+    #     start_time = time.time()
+        
+    #     running_loss = 0.
+    #     running_corrects = 0
 
-    for inputs, labels in valid_dataloader:
-        inputs = inputs.to(device)
-        labels = labels.to(device)
+    #     for inputs, labels in valid_dataloader:
+    #         inputs = inputs.to(device)
+    #         labels = labels.to(device)
 
-        outputs = model(inputs)
-        _, preds = torch.max(outputs, 1)
-        loss = criterion(outputs, labels)
+    #         outputs = model(inputs)
+    #         _, preds = torch.max(outputs, 1)
+    #         loss = criterion(outputs, labels)
 
-        running_loss += loss.item() * inputs.size(0)
-        running_corrects += torch.sum(preds == labels.data)
+    #         running_loss += loss.item() * inputs.size(0)
+    #         running_corrects += torch.sum(preds == labels.data)
 
-        # 한 배치의 첫 번째 이미지에 대하여 결과 시각화
-        print(f'[예측 결과: {class_names[preds[0]]}] (실제 정답: {class_names[labels.data[0]]})')
-        imshow(inputs.cpu().data[0], title='예측 결과: ' + class_names[preds[0]])
+    #         # 한 배치의 첫 번째 이미지에 대하여 결과 시각화
+    #         print(f'[예측 결과: {class_names[preds[0]]}] (실제 정답: {class_names[labels.data[0]]})')
+    #         imshow(inputs.cpu().data[0], title='예측 결과: ' + class_names[preds[0]])
 
-    epoch_loss = running_loss / len(valid_datasets)
-    epoch_acc = running_corrects / len(valid_datasets) * 100.
-    print('[valid Phase] Loss: {:.4f} Acc: {:.4f}% Time: {:.4f}s'.format(epoch_loss, epoch_acc, time.time() - start_time)) '''
-
-
+    #     epoch_loss = running_loss / len(valid_datasets)
+    #     epoch_acc = running_corrects / len(valid_datasets) * 100.
+    #     print('[valid Phase] Loss: {:.4f} Acc: {:.4f}% Time: {:.4f}s'.format(epoch_loss, epoch_acc, time.time() - start_time))
 
 
-''' Test '''
+
+
+
+''' Prediction '''
 def prediction():
     train_datasets = datasets.ImageFolder(os.path.join(data_dir,'train'), transforms_train)
     class_names = train_datasets.classes
+
+    valid_dir = data_dir + '/test'
+
     model = torch.load("./weight/model_best_epoch.pt")
+    # model = models.resnet50(weights="IMAGENET1K_V1")
     model.eval()
     valid_images = []
-    valid_dir = data_dir + '/test'
 
     # test data에 있는 이미지 val_folders에 모아놓기
     valid_image = glob(valid_dir + '/*')
@@ -188,6 +198,9 @@ def prediction():
         prediction = model(image).squeeze(0).softmax(0)
         for i in range(len(class_names)):
             print(f"{class_names[i]}: {round(100 * prediction[i].item())}%")
+
+    if os.path.exists(valid_dir):
+        shutil.rmtree(valid_dir)
         
 def imshow(input, title):
     # torch.Tensor를 numpy 객체로 변환
@@ -201,7 +214,7 @@ def imshow(input, title):
     plt.imshow(input)
     plt.title(title)
     plt.show()
-
+    
 
 if __name__ == "__main__" :
     # train()
