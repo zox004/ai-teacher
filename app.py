@@ -57,7 +57,7 @@ def train() :
 @app.route('/predict', methods=['GET', 'POST'])
 def img_prediction() :
     if request.method == 'POST' :
-
+        os.makedirs('./data/test',exist_ok=True)
         f = request.files['prediction_file']
         f.save('./data/test/' + secure_filename(f.filename))
         md.prediction()
@@ -87,6 +87,6 @@ def download_file():
 
 
 if __name__ == '__main__' :
-    app.run(debug=True)
+    app.run(debug=True,host='0.0.0.0')
     if app.config['DEBUG']:
         app.config['SEND_FILE_MAX_AGE_DEFAULT']
