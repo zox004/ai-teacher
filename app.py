@@ -6,7 +6,7 @@ import pymongo
 import os
 from gridfs import GridFS
 
-client = pymongo.MongoClient("mongodb+srv://aiteacher:1234@aiteacher.2urehvj.mongodb.net/?retryWrites=true&w=majority")
+client = MongoClient("mongodb+srv://aiteacher:1234@aiteacher.2urehvj.mongodb.net/?retryWrites=true&w=majority")
 db = client.aiteacher
 collection = db.data
 gfs = GridFS(db)

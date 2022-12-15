@@ -5,15 +5,10 @@ import torchvision
 from torchvision import datasets, models, transforms
 
 import numpy as np
-import matplotlib.pyplot as plt
 import time
 import os
 
 from glob import glob
-
-import matplotlib
-import matplotlib.pyplot as plt
-import matplotlib.font_manager as fm
 
 from PIL import Image
 import random
@@ -196,18 +191,18 @@ def prediction():
         shutil.rmtree(valid_dir)
     
         
-def imshow(input, title):
-    # torch.Tensor를 numpy 객체로 변환
-    input = input.numpy().transpose((1, 2, 0))
-    # 이미지 정규화 해제하기
-    mean = np.array([0.485, 0.456, 0.406])
-    std = np.array([0.229, 0.224, 0.225])
-    input = std * input + mean
-    input = np.clip(input, 0, 1)
-    # 이미지 출력
-    plt.imshow(input)
-    plt.title(title)
-    plt.show()
+# def imshow(input, title):
+#     # torch.Tensor를 numpy 객체로 변환
+#     input = input.numpy().transpose((1, 2, 0))
+#     # 이미지 정규화 해제하기
+#     mean = np.array([0.485, 0.456, 0.406])
+#     std = np.array([0.229, 0.224, 0.225])
+#     input = std * input + mean
+#     input = np.clip(input, 0, 1)
+#     # 이미지 출력
+#     plt.imshow(input)
+#     plt.title(title)
+#     plt.show()
     
 
 if __name__ == "__main__" :
