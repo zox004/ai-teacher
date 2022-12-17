@@ -2,14 +2,16 @@ from flask import Flask, request, render_template, redirect, send_file, jsonify
 from werkzeug.utils import secure_filename
 import model as md
 from pymongo import MongoClient
-import pymongo
 import os
 from gridfs import GridFS
+from s3 import s3_connection, s3_put_object
+from s3_config import AWS_S3_BUCKET_NAME
 
 client = MongoClient("mongodb+srv://aiteacher:1234@aiteacher.2urehvj.mongodb.net/?retryWrites=true&w=majority")
 db = client.aiteacher
 collection = db.data
 gfs = GridFS(db)
+s3 = s3_connection()
 
 app = Flask(__name__)
 
@@ -24,15 +26,23 @@ def upload_file():
         files = request.files.getlist("file1[]")
 
         for f in files:
-            file_name = f.filename
-            data = f.read()
-            content_type = f.content_type
-            insertImg = gfs.put(data, content_type=content_type, file_name=file_name)
-        
-        # return str(insertImg)
-        # return redirect("/")
-            # img = {'img' : f}
-            # db.data.insert_one(img)
+            filename = secure_filename(f.filename)
+            acl = "public-read"
+            ret = s3.upload_fileobj(f, AWS_S3_BUCKET_NAME, "class1/"+secure_filename(f.filename), ExtraArgs={"ACL": acl, "ContentType" : f.content_type})
+            if ret == True:
+                print("파일 저장 성공")
+            else :
+                print("파일 저장 실패")
+            # saved = f.save('./data/train/class1/' + secure_filename(f.filename))
+
+            # ret = s3_put_object(s3, AWS_S3_BUCKET_NAME, './data/train/class1/', saved)
+
+        # for f in files:
+        #     file_name = f.filename
+        #     data = f.read()
+        #     content_type = f.content_type
+        #     insertImg = gfs.put(data, content_type=content_type, file_name=file_name)
+
         return redirect("/")
         # return jsonify({'msg' : '저장되었습니다'})
 
@@ -43,10 +53,17 @@ def upload_file2():
         files = request.files.getlist("file2[]")
 
         for f in files:
-            file_name = f.filename
-            data = f.read()
-            content_type = f.content_type
-            insertImg = gfs.put(data, content_type=content_type, file_name=file_name)
+            filename = secure_filename(f.filename)
+            acl = "public-read"
+            ret = s3.upload_fileobj(f, AWS_S3_BUCKET_NAME, "class2/"+secure_filename(f.filename), ExtraArgs={"ACL": acl, "ContentType" : f.content_type})
+            if ret == True:
+                print("파일 저장 성공")
+            else :
+                print("파일 저장 실패")
+        #     file_name = f.filename
+        #     data = f.read()
+        #     content_type = f.content_type
+        #     insertImg = gfs.put(data, content_type=content_type, file_name=file_name)
         # for f in files:
         #     f.save('./data/train/class2/' + secure_filename(f.filename))
         return redirect("/")
