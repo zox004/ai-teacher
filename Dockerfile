@@ -1,15 +1,19 @@
 FROM python:3.8
 
+WORKDIR /app
+
 COPY . .
 
-WORKDIR /home/vagrant/flaskImage
+RUN pip install torch \
+    pip install flask \
+    pip install werkzeug \
+    pip install pymongo \
+    pip install torchvision \
+    pip install bs4 \
+    pip install selenium
 
-RUN git clone https://github.com/zox004/ai-teacher.git
-RUN pip install flask
+COPY . /app
 
-WORKDIR ai-teacher/
-
-RUN pip install -r requirements.txt
 
 ENTRYPOINT python app.py
 EXPOSE 5000
