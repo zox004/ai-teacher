@@ -1,4 +1,4 @@
-FROM python:3.8-slim
+FROM python:3.8
 
 WORKDIR /app
 
@@ -6,8 +6,6 @@ COPY . /app
 
 RUN pip install -r requirements.txt
 
-ENTRYPOINT python app.py
-
 EXPOSE 5000
 
-CMD ["python", "app.py"]
+ENTRYPOINT python app.py
