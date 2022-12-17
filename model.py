@@ -57,9 +57,11 @@ def train(model = models.resnet50(weights=None)):
     # 현재 배치를 이용해 격자 형태의 이미지를 만들어 시각화
     inputs, classes = next(iterator)
     out = torchvision.utils.make_grid(inputs)
-    
+    # print(model)
+    print(model.fc.in_features)
     # imshow(out, title=[class_names[x] for x in classes])
     num_features = model.fc.in_features
+    
 
     # transfer learning
     model.fc = nn.Sequential(     
@@ -75,7 +77,7 @@ def train(model = models.resnet50(weights=None)):
 
     model = model.to(device)
 
-    num_epochs = 100
+    num_epochs = 5
 
     best_epoch = None
     best_loss = 5
@@ -206,5 +208,5 @@ def prediction():
     
 
 if __name__ == "__main__" :
-    # train()
-    prediction()
+    train()
+    # prediction()
