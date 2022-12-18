@@ -205,8 +205,9 @@ def prediction():
         for i in range(len(class_names)):
             print(f"{class_names[i]}: {round(100 * prediction[i].item())}%")
 
-    if os.path.exists(valid_dir):
-        shutil.rmtree(valid_dir)
+    return prediction[0], prediction[1]
+    # if os.path.exists(valid_dir):
+    #     shutil.rmtree(valid_dir)
         
 # def imshow(input, title):
 #     # torch.Tensor를 numpy 객체로 변환

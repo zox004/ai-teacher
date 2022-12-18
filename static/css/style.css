@@ -64,6 +64,11 @@ justify-content  :space-evenly;
     text-align: center;
 }
 
+.class1_sub, .class2_sub {
+    margin-left: 10px;
+    margin-top: 25px;
+}
+
 h2{
 color:black;
 background: #E0E5EC;
@@ -168,6 +173,12 @@ margin-left:23%;
     border-radius: 20px;
 }
 
+#file-upload-button {
+    margin-top: 10px
+}
+
+
+
 .trainning_model {
     background: #E0E5EC;
     width: 250px;
@@ -190,6 +201,10 @@ margin-left:23%;
     height: 100px;
     display: block;
     margin-left: 70px;
+}
+
+#result-model {
+    -bottom: 10px;
 }
 
 .img_preview1, .img_preview2 {
@@ -338,6 +353,7 @@ img {
     border-radius: 8px;
     font-size: 14px;
     font-weight: bold;
+    width: 200px;
 }
 
 .start-a {

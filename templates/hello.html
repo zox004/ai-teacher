@@ -12,11 +12,11 @@
 
 <body>
 <h1>AI teacher</h1>
-<form action="/start">
+<!-- <form action="/start">
     <div class="upload-btn-wrapper1">
         <button class="start-a" onclick="alertBtn()">AI teacher 시작하기</button>
     </div>
-</form>
+</form> -->
 <div class="agile-its">
     <div class = "container1">
         <div class="shadow">
@@ -103,16 +103,22 @@
             <div class="photos-upload-view">
                 <form id="upload" action="/predict" method="POST" enctype="multipart/form-data">
                     <div class="upload-btn-wrapper">
-                        <button class="btn3">이미지 업로드</button>
+                        <button class="btn3" >이미지 업로드</button>
                         <input type="file" name="prediction_file" value="Upload" onchange="printFinal1(); printFinal2(); setThumbnail3(event);"  accept=".jpg, .png, .gif, .jfif">
                     </div>
+                    
                     <!-- <input class="class1_sub" type="submit" value="To Model"> -->
-                    <input type="submit" value="Start Prediction">
+                    <div id="result-model">
+                        <input  type="submit" value="Start Prediction">
+                    </div>
                 </form>
-                <form id="download" action="/download" method="POST" enctype="multipart/form-data">
-                    <!-- <input class="class1_sub" type="submit" value="To Model"> -->
-                    <input type="submit" name="downloadfile" value="model download">
-                </form>
+                <div id="result-model">
+                    <form id="download" action="/download" method="POST" enctype="multipart/form-data">
+                        <!-- <input class="class1_sub" type="submit" value="To Model"> -->
+                        <input id="result-model" type="submit" name="downloadfile" value="model download">
+                    </form>
+                </div>
+                
                 
                     <div class="img_preview3"></div>
                     <div id="final_container">
