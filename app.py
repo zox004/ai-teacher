@@ -3,7 +3,6 @@ from werkzeug.utils import secure_filename
 import model as md
 from model import models
 from pymongo import MongoClient
-import torch, io
 import os
 from gridfs import GridFS
 from s3 import s3_connection, s3_put_object
@@ -19,10 +18,12 @@ app = Flask(__name__)
 
 @app.route('/')
 def hellohtml():
+    
     return render_template("hello.html")
 
 @app.route('/start')
 def startAIteacher():
+    
     return redirect("/")
 
 @app.route('/upload_class1', methods=['GET', 'POST'])

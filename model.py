@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torchvision
 from torchvision import datasets, models, transforms
-from app import db, gfs, client
+# from app import db, client
 from pymongo import MongoClient
 from gridfs import GridFS
 
@@ -16,10 +16,10 @@ from glob import glob
 from PIL import Image
 import shutil
 
-client = MongoClient("mongodb+srv://aiteacher:1234@aiteacher.2urehvj.mongodb.net/?retryWrites=true&w=majority")
-db = client.aiteacher
-collection = db.data
-gfs = GridFS(db)
+# client = MongoClient("mongodb+srv://aiteacher:1234@aiteacher.2urehvj.mongodb.net/?retryWrites=true&w=majority")
+# db = client.aiteacher
+# collection = db.data
+# gfs = GridFS(db)
 
 
 # print(fm.findSystemFonts(fontpaths=None, fontext='ttf'))
@@ -129,18 +129,12 @@ def train(model = models.resnet50(weights=None)):
             print("best_loss: {:.4f} \t best_epoch: {}".format(best_loss, best_epoch))
 
     os.makedirs('./weight',exist_ok=True)
-    torch.save(model.state_dict(), './weight/model.pt')
-    with open("./weight/model.pt", "rb") as f :
-        data = f.read()
+    torch.save(model, './weight/model.pt')
+    # with open("./weight/model.pt", "rb") as f :
+    #     data = f.read()
 
-    gfs.put(data, filename="model.pt")
+    # gfs.put(data, filename="model.pt")
 
-
-
-    
-
-    
-    return model
 
 # Valid 
     # with torch.no_grad():
@@ -180,7 +174,7 @@ def prediction():
 
     valid_dir = data_dir + '/test'
 
-    model = torch.load("./weight/model_best_epoch.pt")
+    model = torch.load("./weight/model.pt")
     # model = models.resnet50(weights="IMAGENET1K_V1")
     model.eval()
     valid_images = []
