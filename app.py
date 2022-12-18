@@ -1,6 +1,7 @@
-from flask import Flask, request, render_template, redirect, send_file, jsonify
+from flask import Flask, request, render_template, redirect, send_file
 from werkzeug.utils import secure_filename
 import model as md
+from model import models
 from pymongo import MongoClient
 import os
 from gridfs import GridFS
@@ -34,7 +35,6 @@ def upload_file():
             else :
                 print("파일 저장 실패")
             # saved = f.save('./data/train/class1/' + secure_filename(f.filename))
-
             # ret = s3_put_object(s3, AWS_S3_BUCKET_NAME, './data/train/class1/', saved)
 
         # for f in files:
@@ -60,6 +60,8 @@ def upload_file2():
                 print("파일 저장 성공")
             else :
                 print("파일 저장 실패")
+
+        
         #     file_name = f.filename
         #     data = f.read()
         #     content_type = f.content_type
@@ -72,7 +74,8 @@ def upload_file2():
 def train() :
     if request.method == 'POST' :
 
-        md.train()
+        trained_model = md.train()
+
 
         return redirect("/")
 
@@ -82,10 +85,10 @@ def img_prediction() :
         os.makedirs('./data/test',exist_ok=True)
         f = request.files['prediction_file']
         f.save('./data/test/' + secure_filename(f.filename))
-        md.prediction()
 
-        return redirect("/")
-        # return render_template("/prediction")
+    md.prediction()
+    return redirect("/")
+    # return render_template("/prediction")
 
 
 @app.route('/download', methods = ['GET', 'POST'])

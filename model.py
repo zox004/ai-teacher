@@ -123,7 +123,8 @@ def train(model = models.resnet50(weights=None)):
             print("best_loss: {:.4f} \t best_epoch: {}".format(best_loss, best_epoch))
 
     os.makedirs('./weight',exist_ok=True)
-    # torch.save(model, './weight/model_best_epoch.pt')
+    torch.save(model, './weight/model_best_epoch.pt')
+    return model
 
 # Valid 
     # with torch.no_grad():
