@@ -3,7 +3,7 @@ from werkzeug.utils import secure_filename
 import model as md
 from model import models
 from pymongo import MongoClient
-import os
+import os, uuid
 from gridfs import GridFS
 from s3 import s3_connection, s3_put_object
 from s3_config import AWS_S3_BUCKET_NAME
@@ -13,8 +13,8 @@ db = client.aiteacher
 collection = db.data
 gfs = GridFS(db)
 s3 = s3_connection()
-
 app = Flask(__name__)
+
 
 @app.route('/')
 def hellohtml():
@@ -23,8 +23,10 @@ def hellohtml():
 
 @app.route('/start')
 def startAIteacher():
+    global uid
+    uid = str(uuid.uuid4())
     
-    return redirect("/")
+    return render_template("hello.html")
 
 @app.route('/upload_class1', methods=['GET', 'POST'])
 def upload_file():
@@ -38,7 +40,7 @@ def upload_file():
             if ret == True:
                 print("파일 저장 성공")
             else :
-                print("파일 저장 실패")
+                print(uid)
             # saved = f.save('./data/train/class1/' + secure_filename(f.filename))
             # ret = s3_put_object(s3, AWS_S3_BUCKET_NAME, './data/train/class1/', saved)
 
