@@ -1,7 +1,0 @@
-flask
-werkzeug
-pymongo
-torch
-torchvision
-bs4
-selenium

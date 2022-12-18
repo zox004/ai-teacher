@@ -339,3 +339,27 @@ img {
     font-size: 14px;
     font-weight: bold;
 }
+
+.start-a {
+    margin-left: 400px;
+    margin-top: 15px;
+    float: left;
+    border: 2px solid gray;
+    color: grey;
+    background-color: white;
+    padding: 8px 8px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.upload-btn-wrapper1 {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    top: 150px;
+    bottom: 20px;
+    left: 285px;
+    /* float: left; */
+    }

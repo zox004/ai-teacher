@@ -3,6 +3,9 @@ import torch.nn as nn
 import torch.optim as optim
 import torchvision
 from torchvision import datasets, models, transforms
+from app import db, gfs, client
+from pymongo import MongoClient
+from gridfs import GridFS
 
 import numpy as np
 import time
@@ -11,9 +14,12 @@ import os
 from glob import glob
 
 from PIL import Image
-import random
-
 import shutil
+
+client = MongoClient("mongodb+srv://aiteacher:1234@aiteacher.2urehvj.mongodb.net/?retryWrites=true&w=majority")
+db = client.aiteacher
+collection = db.data
+gfs = GridFS(db)
 
 
 # print(fm.findSystemFonts(fontpaths=None, fontext='ttf'))
@@ -79,7 +85,7 @@ def train(model = models.resnet50(weights=None)):
     model = model.to(device)
 
 
-    num_epochs = 10
+    num_epochs = 5
 
     best_epoch = None
     best_loss = 5
@@ -123,7 +129,17 @@ def train(model = models.resnet50(weights=None)):
             print("best_loss: {:.4f} \t best_epoch: {}".format(best_loss, best_epoch))
 
     os.makedirs('./weight',exist_ok=True)
-    torch.save(model, './weight/model_best_epoch.pt')
+    torch.save(model.state_dict(), './weight/model.pt')
+    with open("./weight/model.pt", "rb") as f :
+        data = f.read()
+
+    gfs.put(data, filename="model.pt")
+
+
+
+    
+
+    
     return model
 
 # Valid 

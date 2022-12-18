@@ -1,8 +1,9 @@
-from flask import Flask, request, render_template, redirect, send_file
+from flask import Flask, request, render_template, redirect, send_file, make_response
 from werkzeug.utils import secure_filename
 import model as md
 from model import models
 from pymongo import MongoClient
+import torch, io
 import os
 from gridfs import GridFS
 from s3 import s3_connection, s3_put_object
@@ -20,6 +21,9 @@ app = Flask(__name__)
 def hellohtml():
     return render_template("hello.html")
 
+@app.route('/start')
+def startAIteacher():
+    return redirect("/")
 
 @app.route('/upload_class1', methods=['GET', 'POST'])
 def upload_file():
@@ -55,17 +59,18 @@ def upload_file2():
         for f in files:
             filename = secure_filename(f.filename)
             acl = "public-read"
-            ret = s3.upload_fileobj(f, AWS_S3_BUCKET_NAME, "class2/"+secure_filename(f.filename), ExtraArgs={"ACL": acl, "ContentType" : f.content_type})
+            ret = s3.upload_fileobj(f, AWS_S3_BUCKET_NAME, "class2/"+secure_filename(f.filename),
+            ExtraArgs={"ACL": acl, "ContentType" : f.content_type})
             if ret == True:
                 print("파일 저장 성공")
             else :
                 print("파일 저장 실패")
 
         
-        #     file_name = f.filename
-        #     data = f.read()
-        #     content_type = f.content_type
-        #     insertImg = gfs.put(data, content_type=content_type, file_name=file_name)
+            file_name = f.filename
+            data = f.read()
+            content_type = f.content_type
+            insertImg = gfs.put(data, content_type=content_type, file_name=file_name)
         # for f in files:
         #     f.save('./data/train/class2/' + secure_filename(f.filename))
         return redirect("/")
@@ -73,8 +78,20 @@ def upload_file2():
 @app.route('/train', methods=['GET', 'POST'])
 def train() :
     if request.method == 'POST' :
+        
+        md.train()
+        # model_doc = {"model_name": "my_model", "model_state_dict": model.state_dict()}
+        # collection.insert_one(model_doc)
+        # gfs.put(model_doc)
+        # collection.insert_one(model_doc)
+        # model = torch.load(archtecture, weights)
+        # architecture_file = io.StringIO(archtecture)
+        # model = torch.load(architecture_file, weights)
 
-        trained_model = md.train()
+        # acl = "public-read"
+        # ret = s3.upload_fileobj(model, AWS_S3_BUCKET_NAME, "class2/model.pt",
+        # ExtraArgs={"ACL": acl})
+
 
 
         return redirect("/")
@@ -93,7 +110,8 @@ def img_prediction() :
 
 @app.route('/download', methods = ['GET', 'POST'])
 def download_file():
-    PATH = 'weight/model_best_epoch.pt'
+    PATH = 'weight/model.pt'
+
     return send_file(PATH, as_attachment=True)
 
 if __name__ == '__main__' :
