@@ -1,4 +1,4 @@
-# **Konkuk University 2022 Advanced Distributed System
+# **Konkuk University 2022 Advanced Distributed System**
 
 ## **Project name : AI Teacher (Web Service for Classification Model with Kubernetes)**
 
