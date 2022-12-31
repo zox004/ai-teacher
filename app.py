@@ -83,13 +83,13 @@ def upload_file2():
 @app.route('/train', methods=['GET', 'POST'])
 def train() :
     if request.method == 'POST' :
-        s3.get_bucket_location(Bucket={AWS_S3_BUCKET_NAME})["LoationConstraint"]
+        # s3.get_bucket_location(Bucket={AWS_S3_BUCKET_NAME})["LoationConstraint"]
         # f"https://{AWS_S3_BUCKET_NAME}.s3.{AWS_S3_BUCKET_REGION}.amazonaws.com/.jpg"
 
         md.train()
   
-        # return redirect("/")
-        return f"https://{AWS_S3_BUCKET_NAME}.s3.{AWS_S3_BUCKET_REGION}.amazonaws.com/cat/1.jpg"
+        return redirect("/")
+        # return f"https://{AWS_S3_BUCKET_NAME}.s3.{AWS_S3_BUCKET_REGION}.amazonaws.com/cat/1.jpg"
 
 @app.route('/predict', methods=['GET', 'POST'])
 def img_prediction() :
@@ -98,10 +98,10 @@ def img_prediction() :
         f = request.files['prediction_file']
         f.save('./data/test/' + secure_filename(f.filename))
 
-    md.prediction()
-    return redirect("/")
-    # return render_template("/prediction")
+    a, b = md.prediction()
 
+    # return redirect("/")
+    return render_template("hello.html", )
 
 @app.route('/download', methods = ['GET', 'POST'])
 def download_file():

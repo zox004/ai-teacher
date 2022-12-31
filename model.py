@@ -205,7 +205,7 @@ def prediction():
         for i in range(len(class_names)):
             print(f"{class_names[i]}: {round(100 * prediction[i].item())}%")
 
-    return prediction[0], prediction[1]
+    return round(100 * prediction[0].item()), round(100 * prediction[1].item())
     # if os.path.exists(valid_dir):
     #     shutil.rmtree(valid_dir)
         

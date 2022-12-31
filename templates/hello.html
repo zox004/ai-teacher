@@ -104,12 +104,12 @@
                 <form id="upload" action="/predict" method="POST" enctype="multipart/form-data">
                     <div class="upload-btn-wrapper">
                         <button class="btn3" >이미지 업로드</button>
-                        <input type="file" name="prediction_file" value="Upload" onchange="printFinal1(); printFinal2(); setThumbnail3(event);"  accept=".jpg, .png, .gif, .jfif">
+                        <input type="file" name="prediction_file" value="Upload" onchange="setThumbnail3(event);"  accept=".jpg, .png, .gif, .jfif">
                     </div>
                     
                     <!-- <input class="class1_sub" type="submit" value="To Model"> -->
                     <div id="result-model">
-                        <input  type="submit" value="Start Prediction">
+                        <input type="submit" value="Start Prediction" onchange="printFinal1(); printFinal2();">
                     </div>
                 </form>
                 <div id="result-model">
@@ -126,13 +126,13 @@
                             <div id="final1">
 
                             </div>
-                            <div id = "final1_bar"></div>
+                            <div id="final1_bar">{{a}}</div>
                         </div>
                         <div id="final2_container">
                             <div id="final2">
 
                             </div>
-                            <div id="final2_bar"></div>
+                            <div id="final2_bar">{{b}}</div>
                         </div>
                     </div>
                     <!-- <input type="submit" value="예측 결과">
@@ -175,8 +175,8 @@
         // document.getElementById("fin")
         const name1 = document.getElementById("class1").value;
         document.getElementById("final1_container").innerHTML = "<div class='name1'>" + name1 + "</div>";
-    }
-
+    };
+    
     function printFinal2()  {
         const name2 = document.getElementById("class2").value;
         document.getElementById("final2_container").innerHTML = "<div class='name2'>" + name2 + "</div>";
