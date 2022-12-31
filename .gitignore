@@ -1,0 +1,4 @@
+__pycache__
+ai_teacher_venv
+.DS_Store
+*.pt

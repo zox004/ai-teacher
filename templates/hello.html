@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AIteacher with KU</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css') }}">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+</head>
+
+<body>
+<h1>AI teacher</h1>
+<form action="/start">
+    <div class="upload-btn-wrapper1">
+        <button class="start-a" onclick="alertBtn()">AI teacher 시작하기</button>
+    </div>
+</form>
+<div class="agile-its">
+    <div class = "container1">
+        <div class="shadow">
+                <h2><input id="class1" type="text" placeholder="Class 1"></h2>
+            <div class="w3layouts1">
+                <div class="photos-upload-view">
+                    <form class="upload1" action="/upload_class1" method="POST" enctype="multipart/form-data">
+                        <!-- <div class="upload-btn-wrapper">
+                            <button class="btn1">이미지 업로드</button>
+                        </div> -->
+                        <input id="class1_sub" type="file" value="To Model" name="file1[]" onchange="setThumbnail(event);" accept=".jpg, .png, .gif, .jfif" multiple>
+                        <label for="class1_sub"></label>
+                        <input class="class1_sub" type="submit" value="To Model">
+                    </form>
+                        <p class="preview1_howmany"></p>
+                        
+                        <div class="img_preview1">
+                                                    
+                        </div>
+                        <!-- <input type="submit" value="예측 결과"> -->
+                        <!-- {% if label %}
+                            <span class="result_lable">
+                                {{ label }}
+                            </span>
+                        {% endif %} -->
+                </div>  
+            </div>
+        </div>
+
+        <div class="shadow">
+            <h2><input id="class2" type="text" placeholder="Class 2" ></h2>
+            <div class="w3layouts2">
+                <div class="photos-upload-view">
+                    <form class="upload1" action="/upload_class2" method="POST" enctype="multipart/form-data">
+                        <!-- <div class="upload-btn-wrapper">
+                            <button class="btn2">이미지 업로드</button>
+                            
+                        </div> -->
+                        <input id="class2_sub" type="file" name="file2[]" onchange="setThumbnail2(event);" accept=".jpg, .png, .gif, .jfif" multiple>
+                        <label for="class2_sub"></label>
+                        <input class="class2_sub" type="submit" value="To Model">
+                    </form>
+                        <p class="preview2_howmany"></p>
+                        
+                        <div class="img_preview2">
+                                                    
+                        </div>
+                        <!-- <input type="submit" value="예측 결과">
+                        {% if label %}
+                            <span class="result_lable">
+                                {{ label }}
+                            </span>
+                        {% endif %}{}{} -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class = "container2">
+        <div class="trainning_model">
+
+            <form id="trainning_btn" action="/train" method="POST" enctype="multipart/form-data">
+                <div class="trainning">
+
+                    <input class="tr_btn" type="submit" value="모델 학습시키기">
+                    
+                    <img id="ai_img" src="static/img/brain.png">
+                    
+                </div>
+                
+                <!-- <input type="submit" value="예측 결과"> -->
+                <!-- {% if label %}
+                    <span class="result_lable">
+                        {{ label }}
+                    </span>
+                {% endif %} -->
+            </form>
+
+    
+        </div>
+    </div>
+    <div class = "container3">
+        <div class="result">
+            <h2><input id="class2" type="text" value="결과 확인"></h2>
+            <div class="photos-upload-view">
+                <form id="upload" action="/predict" method="POST" enctype="multipart/form-data">
+                    <div class="upload-btn-wrapper">
+                        <button class="btn3">이미지 업로드</button>
+                        <input type="file" name="prediction_file" value="Upload" onchange="printFinal1(); printFinal2(); setThumbnail3(event);"  accept=".jpg, .png, .gif, .jfif">
+                    </div>
+                    <!-- <input class="class1_sub" type="submit" value="To Model"> -->
+                    <input type="submit" value="Start Prediction">
+                </form>
+                <form id="download" action="/download" method="POST" enctype="multipart/form-data">
+                    <!-- <input class="class1_sub" type="submit" value="To Model"> -->
+                    <input type="submit" name="downloadfile" value="model download">
+                </form>
+                
+                    <div class="img_preview3"></div>
+                    <div id="final_container">
+                        <div id="final1_container">
+                            <div id="final1">
+
+                            </div>
+                            <div id = "final1_bar"></div>
+                        </div>
+                        <div id="final2_container">
+                            <div id="final2">
+
+                            </div>
+                            <div id="final2_bar"></div>
+                        </div>
+                    </div>
+                    <!-- <input type="submit" value="예측 결과">
+                    {% if label %}
+                        <span class="result_lable">
+                            {{ label }}
+                        </span>
+                    {% endif %} -->
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+    function alertBtn() {
+        alert("AI teacher 마음껏 이용해 보라구~~~!");
+    }
+
+    $(document).ready( function() {
+    
+        $("input[type=file]").change(function () {
+    
+            var fileInput = document.getElementById("class2_sub");
+    
+            var files = fileInput.files;
+            var file;
+        })
+
+        $(function() {
+            $(".input_img").click(function(){
+                $(this).remove();
+                document.querySelector(".preview2_howmany").innerHTML = files.length + "개 이미지 샘플";
+            });
+        });
+    });
+    function printFinal1()  {
+        // const name1 = $("#class1").val();
+        // document.getElementById("fin")
+        const name1 = document.getElementById("class1").value;
+        document.getElementById("final1_container").innerHTML = "<div class='name1'>" + name1 + "</div>";
+    }
+
+    function printFinal2()  {
+        const name2 = document.getElementById("class2").value;
+        document.getElementById("final2_container").innerHTML = "<div class='name2'>" + name2 + "</div>";
+    }
+    function setThumbnail(event) {
+        cnt1 = 0;
+    for (var image of event.target.files) {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            
+            var img = document.createElement("img");
+            img.setAttribute("class", 'input_img');
+            img.setAttribute("src", event.target.result);
+            img.setAttribute("width", 60);
+            img.setAttribute("height", 60);
+            img.setAttribute("title", "클릭 시 삭제됩니다.");
+
+
+            document.querySelector(".img_preview1").appendChild(img);
+
+            $(function() {
+                $(".input_img").click(function(){
+                    (this).remove();
+
+                    
+                    
+                    
+                    // var fileInput = document.getElementsByClassName("input_img");
+              
+                    // var files = fileInput.files;
+                    // var file;
+              
+                    // for (var i = 0; i < files.length; i++) {
+                  
+                    //     file = files[i];
+  
+                    //     alert(file.name);
+                    // }
+                    
+                });
+            });
+            
+        };
+
+        console.log(image);
+        reader.readAsDataURL(image);
+        // cnt1++;
+        var cnt = $('input[name=file1]');
+    }
+    document.querySelector(".preview1_howmany").innerHTML = cnt.length() + "개 이미지 샘플";
+        
+        
+    }
+
+    function setThumbnail2(event) {
+        cnt2 = 0;
+    for (var image of event.target.files) {
+        var reader = new FileReader();
+    
+        reader.onload = function(event) {
+            
+            var img = document.createElement("img");
+            img.setAttribute("class", 'input_img')
+            img.setAttribute("src", event.target.result);
+            img.setAttribute("width", 60);
+            img.setAttribute("height", 60);
+            img.setAttribute("title", "클릭 시 삭제됩니다.");
+
+            document.querySelector(".img_preview2").appendChild(img);
+
+            $(function() {
+                $(".input_img").click(function(){
+                    var fileInput = document.getElementById("class2_sub");
+    
+                    var files = fileInput.files;
+                    $(this).remove();
+                    document.querySelector(".preview2_howmany").innerHTML = files.length + "개 이미지 샘플";
+                });
+            });
+        };
+
+        console.log(image);
+        reader.readAsDataURL(image);
+
+        // var cnt = $('input[type=file]').val();
+        // document.querySelector(".preview2_howmany").innerHTML = cnt + "개 이미지 샘플";
+    }
+    
+    // document.querySelector(".preview2_howmany").innerHTML = file2.length() + "개 이미지 샘플";
+    
+    
+    }
+
+
+    function setThumbnail3(event) {
+    for (var image of event.target.files) {
+        var reader = new FileReader();
+    
+        reader.onload = function(event) {
+            
+            var img = document.createElement("img");
+            img.setAttribute("class", 'result_img');
+            img.setAttribute("src", event.target.result);
+            img.setAttribute("width", 180);
+            img.setAttribute("height", 180);
+            img.setAttribute("title", "클릭 시 삭제됩니다.");
+
+            document.querySelector(".img_preview3").appendChild(img);
+
+            $(function() {
+                $(".result_img").click(function(){
+                    $(this).remove();
+                });
+            });
+        };  
+        console.log(image);
+        reader.readAsDataURL(image);
+    }
+    }
+    </script>
+</body>
+</html>
