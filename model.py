@@ -186,12 +186,6 @@ def prediction(trained_model):
     image = transforms_test(image).unsqueeze(0).to(device)
     
     with torch.no_grad():
-        # origin code
-        # outputs = model(image)
-        # _, preds = torch.max(outputs, 1)
-        # imshow(image.cpu().data[0], title=' Classification : ' + class_names[preds[0]])
-    
-        # modifying code - show answer percent
         prediction = model(image).squeeze(0).softmax(0)
         for i in range(len(class_names)):
             print(f"{class_names[i]}: {round(100 * prediction[i].item())}%")
